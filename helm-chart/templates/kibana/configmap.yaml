@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "kibana.fullname" . }}-configmap
+  labels:
+    {{- include "kibana.labels" . | nindent 4 }}
+data:
+  kibana.yml: |  
+{{- range $path, $config := .Values.kibana.kibanaConfig }}
+  {{ $path }}: |
+{{ tpl $config $ | indent 4 -}}
+{{- end -}}

@@ -1,0 +1,17 @@
+{{- if .Values.globalService }}
+apiVersion: assist.eu/v1
+kind: MultiClusterService
+metadata:
+  name: {{ include "kibana.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  annotations:
+    io.cilium/global-service: "true"
+  labels:
+    {{- include "kibana.labels" . | nindent 4 }}
+spec:
+  ports:
+    - name: port1
+      port: {{ .Values.kibana.service.ports.port1.port }}
+      targetPort: {{ .Values.kibana.service.ports.port1.targetPort }}
+      protocol: {{ .Values.kibana.service.ports.port1.protocol }}
+{{- end }}
